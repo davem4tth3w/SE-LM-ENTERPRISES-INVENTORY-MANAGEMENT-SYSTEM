@@ -73,7 +73,7 @@ include('sidebar.php');
                                 <th>Order Status</th>
                                 <th>Order Date</th>
                                 <?php
-                                if ($_SESSION['type'] == 'master') {
+                                if ($_SESSION['type'] == 'admin') {
                                     echo '<th>Created By</th>';
                                 }
                                 ?>
@@ -128,16 +128,17 @@ include('sidebar.php');
     <hr />
 </div>
 
-<!-- added code start -->
-								<!-- <div class="form-group">
+<!-- VAT CODE START -->
+<div class="form-group">
     <label>Enter VAT%</label>
     <input type="text" name="vat_percentage" id="vat_percentage" class="form-control" />
 </div>
 <div class="form-group">
     <label>Enter Discount</label>
     <input type="text" name="discount" id="discount" class="form-control" />
-</div> -->
-<!-- added code end -->
+</div>
+<!-- VAT CODE END -->
+
                         <div class="form-group">
                             <label>Select Payment Status</label>
                             <select name="payment_status" id="payment_status" class="form-control">
@@ -168,7 +169,7 @@ include('sidebar.php');
 								type:"POST"
 							},
 							<?php
-							if($_SESSION["type"] == 'master')
+							if($_SESSION["type"] == 'admin')
 							{
 							?>
 							"columnDefs":[
@@ -243,23 +244,47 @@ include('sidebar.php');
 							$('#row'+row_no).remove();
 						});
 
+						// origina code start
+
+						// $(document).on('submit', '#order_form', function(event){
+						// 	event.preventDefault();
+						// 	$('#action').attr('disabled', 'disabled');
+						// 	var form_data = $(this).serialize();
+						// 	$.ajax({
+						// 		url:"order_action.php",
+						// 		method:"POST",
+						// 		data:form_data,
+						// 		success:function(data){
+						// 			$('#order_form')[0].reset();
+						// 			$('#orderModal').modal('hide');
+						// 			$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
+						// 			$('#action').attr('disabled', false);
+						// 			orderdataTable.ajax.reload();
+						// 		}
+						// 	});
+						// });
+
+						// origina code END
+
+
 						$(document).on('submit', '#order_form', function(event){
-							event.preventDefault();
-							$('#action').attr('disabled', 'disabled');
-							var form_data = $(this).serialize();
-							$.ajax({
-								url:"order_action.php",
-								method:"POST",
-								data:form_data,
-								success:function(data){
-									$('#order_form')[0].reset();
-									$('#orderModal').modal('hide');
-									$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
-									$('#action').attr('disabled', false);
-									orderdataTable.ajax.reload();
-								}
-							});
-						});
+    event.preventDefault();
+    $('#action').attr('disabled', 'disabled');
+    var form_data = $(this).serialize();
+    $.ajax({
+        url:"order_action.php",
+        method:"POST",
+        data:form_data,
+        success:function(data){
+            $('#order_form')[0].reset();
+            $('#orderModal').modal('hide');
+            $('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
+            $('#action').attr('disabled', false);
+            orderdataTable.ajax.reload();
+        }
+    });
+});
+
 
 						$(document).on('click', '.update', function(){
 							var inventory_order_id = $(this).attr("id");
@@ -315,25 +340,6 @@ include('sidebar.php');
 					
 
 					});
-
-					$(document).on('submit', '#order_form', function(event){
-    event.preventDefault();
-    $('#action').attr('disabled', 'disabled');
-    var form_data = $(this).serialize();
-    $.ajax({
-        url:"order_action.php",
-        method:"POST",
-        data:form_data,
-        success:function(data){
-            $('#order_form')[0].reset();
-            $('#orderModal').modal('hide');
-            $('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
-            $('#action').attr('disabled', false);
-            orderdataTable.ajax.reload();
-        }
-    });
-});
-
 				</script>
 
 <script>
