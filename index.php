@@ -41,7 +41,7 @@ if(!isset($_SESSION["type"]))
 		</div>
 
 		<?php
-		if ($_SESSION['type'] == 'master') {
+		if ($_SESSION['type'] == 'admin') {
 		?>
 			<div class="col-md-3">
 				<div class="card">
@@ -105,7 +105,7 @@ if(!isset($_SESSION["type"]))
 		</div>
 		<hr />
 		<?php
-		if ($_SESSION['type'] == 'master') {
+		if ($_SESSION['type'] == 'admin') {
 		?>
 			<div class="col-md-12">
 				<div class="card">
