@@ -50,12 +50,12 @@ if(isset($_GET["pdf"]) && isset($_GET['order_id']))
 				<br />
 				<table width="100%" border="1" cellpadding="5" cellspacing="0">
 					<tr>
-						<th rowspan="2">Order No.</th>
+						<th rowspan="2">Sr No.</th>
 						<th rowspan="2">Product</th>
 						<th rowspan="2">Quantity</th>
 						<th rowspan="2">Price</th>
 						<th rowspan="2">Actual Amt.</th>
-						<th colspan="2">VAT (%)</th>
+						<th colspan="2">VAT (%12)</th>
 						<th rowspan="2">Total</th>
 					</tr>
 					<tr>
@@ -77,6 +77,9 @@ if(isset($_GET["pdf"]) && isset($_GET['order_id']))
 		$total = 0;
 		$total_actual_amount = 0;
 		$total_tax_amount = 0;
+
+
+
 		foreach($product_result as $sub_row)
 		{
 			$count = $count + 1;
@@ -87,6 +90,32 @@ if(isset($_GET["pdf"]) && isset($_GET['order_id']))
 			$total_actual_amount = $total_actual_amount + $actual_amount;
 			$total_tax_amount = $total_tax_amount + $tax_amount;
 			$total = $total + $total_product_amount;
+
+
+					// Calculate VAT, discount, and overall total
+// $vat = 0.1; // Assuming VAT is 10%
+$vat = 0.12; // Assuming VAT is 12%
+$discount = 0; // Assuming no discount for now
+$overall_total = $total + ($total * $vat) - $discount;
+
+
+
+
+// Update the inventory_order table with the calculated values
+$update_statement = $connect->prepare("
+    UPDATE inventory_order 
+    SET vat = :vat, discount = :discount, overall_total = :overall_total
+    WHERE inventory_order_id = :order_id
+");
+$update_statement->execute(array(
+    ':vat' => $vat,
+    ':discount' => $discount,
+    ':overall_total' => $overall_total,
+    ':order_id' => $_GET["order_id"]
+));
+
+
+
 			$output .= '
 				<tr>
 					<td>'.$count.'</td>
@@ -108,6 +137,21 @@ if(isset($_GET["pdf"]) && isset($_GET['order_id']))
 			<td align="right"><b>'.number_format($total_tax_amount, 2).'</b></td>
 			<td align="right"><b>'.number_format($total, 2).'</b></td>
 		</tr>
+
+
+		<tr>
+		<td colspan="4" align="right"><b>VAT(%12)</b></td>
+		<td colspan="3" align="right">'.number_format($total_tax_amount, 2).'</td>
+	</tr>
+	<tr>
+		<td colspan="4" align="right"><b>Discount</b></td>
+		<td colspan="3" align="right">'.number_format($discount, 2).'</td>
+	</tr>
+	<tr>
+		<td colspan="4" align="right"><b>Overall Total</b></td>
+		<td colspan="3" align="right">'.number_format($overall_total, 2).'</td>
+	</tr>
+
 		';
 		$output .= '
 						</table>
@@ -117,7 +161,7 @@ if(isset($_GET["pdf"]) && isset($_GET['order_id']))
 						<br />
 						<br />
 						<br />
-						<p align="right">_________________________<br />Receiver Signature</p>
+						<p align="right">______________________________<br />Receiver Signature</p>
 						<br />
 						<br />
 						<br />
