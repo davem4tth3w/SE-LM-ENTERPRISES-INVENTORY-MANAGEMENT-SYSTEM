@@ -8,7 +8,7 @@ if(!isset($_SESSION["type"]))
 	header('location:login.php');
 }
 
-if($_SESSION["type"] != 'master')
+if($_SESSION["type"] != 'admin')
 {
 	header("location:index.php");
 }
