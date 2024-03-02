@@ -1,0 +1,36 @@
+*{
+    margin: none;
+    padding: none;
+    width: auto;
+    height: auto;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.content-container {
+  align-items:center;
+  justify-content:center; 
+  margin-left: 12rem;
+  width: auto;
+  height: auto;
+  margin-top: 20px;
+  padding: 0px 1rem;
+
+}
+
+.content-container .row{
+  width: 100%;
+}
+
+.panel-default{
+  box-shadow: 0px 0px 3px rgb(150, 150, 150);
+}
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>

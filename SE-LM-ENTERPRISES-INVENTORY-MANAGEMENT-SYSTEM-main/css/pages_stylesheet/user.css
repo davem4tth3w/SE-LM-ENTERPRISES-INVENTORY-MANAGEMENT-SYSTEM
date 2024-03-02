@@ -1,0 +1,30 @@
+*{
+    margin: none;
+    padding: none;
+    width: auto;
+    height: auto;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.content-container {
+  align-items:center;
+  justify-content:center; 
+  margin-left: 12rem;
+  width: auto;
+  height: auto;
+  margin-top: 20px;
+  padding: 0px 1rem;
+
+}
+
+
+.content-container .row{
+  width: 100%;
+}
+
+.panel-default{
+  box-shadow: 0px 0px 3px rgb(150, 150, 150);
+}
