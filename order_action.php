@@ -23,7 +23,7 @@ if(isset($_POST['btn_action']))
 				':inventory_order_name'			=>	$_POST['inventory_order_name'],
 				':inventory_order_address'		=>	$_POST['inventory_order_address'],
 				':payment_status'				=>	$_POST['payment_status'],
-				':inventory_order_status'		=>	'active',
+				':inventory_order_status'		=>	'paid',
 				':inventory_order_created_date'	=>	date("Y-m-d")
 			)
 		);
@@ -33,12 +33,13 @@ if(isset($_POST['btn_action']))
 
 		if(isset($inventory_order_id))
 		{
+
 			$total_amount = 0;
-			for($count = 0; $count<count($_POST["product_id"]); $count++)
+			for($count = 0; $count < count($_POST["product_id"]); $count++)
 			{
 				$product_details = fetch_product_details($_POST["product_id"][$count], $connect);
 				$sub_query = "
-				INSERT INTO inventory_order_product (inventory_order_id, product_id, quantity, price, tax) VALUES (:inventory_order_id, :product_id, :quantity, :price, :tax)
+				INSERT INTO inventory_order_product (inventory_order_id, product_id, quantity, price) VALUES (:inventory_order_id, :product_id, :quantity, :price)
 				";
 				$statement = $connect->prepare($sub_query);
 				$statement->execute(
@@ -47,12 +48,19 @@ if(isset($_POST['btn_action']))
 						':product_id'			=>	$_POST["product_id"][$count],
 						':quantity'				=>	$_POST["quantity"][$count],
 						':price'				=>	$product_details['price'],
-						':tax'					=>	$product_details['tax']
+						
 					)
 				);
-				$base_price = $product_details['price'] * $_POST["quantity"][$count];
-				$tax = ($base_price/100)*$product_details['tax'];
-				$total_amount = $total_amount + ($base_price + $tax);
+
+		$base_price = $product_details['price'] * $_POST["quantity"][$count];
+		$vat_percentage = isset($_POST['vat_percentage']) ? $_POST['vat_percentage'] : 0;
+		$discount = isset($_POST['discount']) ? $_POST['discount'] : 0;
+
+		$discount_amount = ($base_price * $discount) / 100;
+		$price_after_discount = $base_price - $discount_amount;
+		$vat_amount = ($price_after_discount * $vat_percentage) / 100;
+		$total_amount += $price_after_discount + $vat_amount;
+
 			}
 			$update_query = "
 			UPDATE inventory_order 
@@ -70,6 +78,21 @@ if(isset($_POST['btn_action']))
 				echo '<br />';
 				echo $inventory_order_id;
 			}
+
+
+			$update_query = "
+            UPDATE inventory_order 
+            SET vat_percentage = :vat_percentage, 
+                discount = :discount 
+            WHERE inventory_order_id = :inventory_order_id
+        ";
+        $statement = $connect->prepare($update_query);
+        $statement->execute(array(
+            ':vat_percentage' => $vat_percentage,
+            ':discount' => $discount,
+            ':inventory_order_id' => $inventory_order_id 
+        ));
+
 		}
 	}
 
@@ -158,13 +181,11 @@ if(isset($_POST['btn_action']))
 		{
 			$total_amount = 0;
 
-			// Original code
-			// for($count = 0; $count < count($_POST["product_id"]); $count++)
 			for($count = 0; $count < count($_POST["inventory_order_id"]); $count++)
 			{
 				$product_details = fetch_product_details($_POST["product_id"][$count], $connect);
 				$sub_query = "
-				INSERT INTO inventory_order_product (inventory_order_id, product_id, quantity, price, tax) VALUES (:inventory_order_id, :product_id, :quantity, :price, :tax)
+				INSERT INTO inventory_order_product (inventory_order_id, product_id, quantity, price) VALUES (:inventory_order_id, :product_id, :quantity, :price)
 				";
 				$statement = $connect->prepare($sub_query);
 				$statement->execute(
@@ -173,20 +194,22 @@ if(isset($_POST['btn_action']))
 						':product_id'			=>	$_POST["product_id"][$count],
 						':quantity'				=>	$_POST["quantity"][$count],
 						':price'				=>	$product_details['price'],
-						':tax'					=>	$product_details['tax']
+						
 					)
 				);
 				$base_price = $product_details['price'] * $_POST["quantity"][$count];
-				$tax = ($base_price/100)*$product_details['tax'];
-				$total_amount = $total_amount + ($base_price + $tax);
+
+				$total_amount = $total_amount + $base_price;
 			}
 			$update_query = "
 			UPDATE inventory_order 
+
 			SET inventory_order_name = :inventory_order_name, 
 			inventory_order_date = :inventory_order_date, 
 			inventory_order_address = :inventory_order_address, 
 			inventory_order_total = :inventory_order_total, 
 			payment_status = :payment_status
+
 			WHERE inventory_order_id = :inventory_order_id
 			";
 			$statement = $connect->prepare($update_query);
@@ -200,6 +223,23 @@ if(isset($_POST['btn_action']))
 					':inventory_order_id'			=>	$_POST["inventory_order_id"]
 				)
 			);
+
+			//VAT CODE START
+			$update_query = "
+    UPDATE inventory_order 
+    SET inventory_order_total = :inventory_order_total 
+    WHERE inventory_order_id = :inventory_order_id
+    ";
+    $statement = $connect->prepare($update_query);
+    $statement->execute(
+        array(
+            ':inventory_order_total'    =>  $total_amount,
+            ':inventory_order_id'       =>  $inventory_order_id
+        )
+    );
+		//VAT CODE END
+
+
 			$result = $statement->fetchAll();
 			if(isset($result))
 			{
@@ -210,13 +250,15 @@ if(isset($_POST['btn_action']))
 
 	//ORIGINAL CODE START
 
-	if($_POST['btn_action'] == 'delete')
+
+	if($_POST['btn_action'] == 'status')
 	{
-		$status = 'active';
-		if($_POST['status'] == 'active')
+		$status = 'paid';
+		if($_POST['status'] == 'paid')
 		{
-			$status = 'inactive';
+			$status = 'partial payment';
 		}
+
 		$query = "
 		UPDATE inventory_order 
 		SET inventory_order_status = :inventory_order_status 
@@ -238,17 +280,25 @@ if(isset($_POST['btn_action']))
 
 	//ORIGINAL CODE END
 
-
-
-	// 	if($_POST['btn_action'] == 'delete')
-	// {
-	// 	$query = "
-	// 	DELETE FROM inventory_order 
-	// 	WHERE inventory_order_id = :inventory_order_id
-	// 	";
-	
-	// }
-
+	if($_POST['btn_action'] == 'delete')
+	{
+		$query = "
+		DELETE FROM inventory_order 
+		WHERE inventory_order_id = :inventory_order_id
+		";
+		
+		$statement = $connect->prepare($query);
+		$statement->execute(
+			array(
+				':inventory_order_id'		=>	$_POST["inventory_order_id"]
+			)
+		);
+		$result = $statement->fetchAll();
+		if(isset($result))
+		{
+			echo 'Order deleted';
+		}
+	}
 }
 
 ?>

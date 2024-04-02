@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>order page</title><!-- bootstrap-5.3.2 start FOLDER LINKS-->
+<script src="js/jqueryv3.6.0.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
+<!-- bootstrap-5.3.2 end -->
+
+    <link rel="stylesheet" href="bootstrap_v5/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+    <script src="bootstrap_v5/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- Other CSS files or styles can be included here -->
+</head>
+<body>
+
+<!-- Your PHP code for generating HTML content here -->
+
 <?php
 //order.php
 
@@ -10,7 +34,7 @@ if(!isset($_SESSION['type']))
     header('location:login.php');
 }
 
-// include('header.php');
+
 
 include('sidebar.php');
 
@@ -21,19 +45,6 @@ include('sidebar.php');
     <?php include "css/pages_stylesheet/order.css"?>
 </style>
 
-<!-- bootstrap-5.3.2 start FOLDER LINKS-->
-<script src="js/jqueryv3.6.0.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
-<!-- bootstrap-5.3.2 end -->
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>
 
 
     <div class="content-container">
@@ -77,6 +88,7 @@ include('sidebar.php');
                                     echo '<th>Created By</th>';
                                 }
                                 ?>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -157,7 +169,15 @@ include('sidebar.php');
         </div>
     </div>
 
-	<script type="text/javascript">
+
+		
+
+
+</body>
+</html>
+
+
+<script>
 					$(document).ready(function(){
 
 						var orderdataTable = $('#order_data').DataTable({
@@ -174,7 +194,7 @@ include('sidebar.php');
 							?>
 							"columnDefs":[
 								{
-									"targets":[4, 5, 6, 7, 8, 9],
+									"targets":[4, 5, 6, 7, 8, 9, 10],
 									"orderable":false,
 								},
 							],
@@ -244,46 +264,24 @@ include('sidebar.php');
 							$('#row'+row_no).remove();
 						});
 
-						// origina code start
-
-						// $(document).on('submit', '#order_form', function(event){
-						// 	event.preventDefault();
-						// 	$('#action').attr('disabled', 'disabled');
-						// 	var form_data = $(this).serialize();
-						// 	$.ajax({
-						// 		url:"order_action.php",
-						// 		method:"POST",
-						// 		data:form_data,
-						// 		success:function(data){
-						// 			$('#order_form')[0].reset();
-						// 			$('#orderModal').modal('hide');
-						// 			$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
-						// 			$('#action').attr('disabled', false);
-						// 			orderdataTable.ajax.reload();
-						// 		}
-						// 	});
-						// });
-
-						// origina code END
-
 
 						$(document).on('submit', '#order_form', function(event){
-    event.preventDefault();
-    $('#action').attr('disabled', 'disabled');
-    var form_data = $(this).serialize();
-    $.ajax({
-        url:"order_action.php",
-        method:"POST",
-        data:form_data,
-        success:function(data){
-            $('#order_form')[0].reset();
-            $('#orderModal').modal('hide');
-            $('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
-            $('#action').attr('disabled', false);
-            orderdataTable.ajax.reload();
-        }
-    });
-});
+                            event.preventDefault();
+                            $('#action').attr('disabled', 'disabled');
+                            var form_data = $(this).serialize();
+                            $.ajax({
+                                url:"order_action.php",
+                                method:"POST",
+                                data:form_data,
+                                success:function(data){
+                                    $('#order_form')[0].reset();
+                                    $('#orderModal').modal('hide');
+                                    $('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
+                                    $('#action').attr('disabled', false);
+                                    orderdataTable.ajax.reload();
+                                }
+                            });
+                        });
 
 
 						$(document).on('click', '.update', function(){
@@ -312,10 +310,10 @@ include('sidebar.php');
 
 						//orginalcode start
 
-						$(document).on('click', '.delete', function(){
+						$(document).on('click', '.status', function(){
 							var inventory_order_id = $(this).attr("id");
 							var status = $(this).data("status");
-							var btn_action = "delete";
+							var btn_action = "status";
 							if(confirm("Are you sure you want to change status?"))
 							{
 								$.ajax({
@@ -340,13 +338,34 @@ include('sidebar.php');
 					
 
 					});
-				</script>
 
-<script>
+
+                    $(document).on('click', '.delete', function(){
+            var inventory_order_id = $(this).attr("id");
+
+            var btn_action = 'delete';
+            if(confirm("Are you sure you want to delete this order?"))
+            {
+                $.ajax({
+                    url:"order_action.php",
+                    method:"POST",
+                    data:{inventory_order_id:inventory_order_id, btn_action:btn_action},
+                    success:function(data){
+                        $('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+                        orderdataTable.ajax.reload();
+                    }
+                });
+            }
+            else
+            {
+                return false;
+            }
+        });
+
     $(document).ready(function() {
         // Function to toggle search box visibility
         $('#span_product_details').on('click', function() {
-            $('#product_search').toggle();
+            $('#product_search').on();
         });
 
         // Function to filter dropdown options based on search input
@@ -359,4 +378,5 @@ include('sidebar.php');
     });
 </script>
 
-		
+
+

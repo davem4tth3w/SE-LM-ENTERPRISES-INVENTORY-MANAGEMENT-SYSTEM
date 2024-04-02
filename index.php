@@ -10,10 +10,6 @@ if(!isset($_SESSION["type"]))
 	header("location:login.php");
 }
 
-// include('header.php');
-
-
-
 ?>
 
 <!-- bootstrap-5.3.2 start FOLDER LINKS-->
@@ -41,39 +37,56 @@ if(!isset($_SESSION["type"]))
 		</div>
 
 		<?php
-		if ($_SESSION['type'] == 'admin') {
+		if ($_SESSION['type']) {
 		?>
 			<div class="col-md-3">
-				<div class="card">
-					<div class="card-header"><strong>Total User</strong></div>
+
+			<div class="user-card">
+			<div class="card">
+					<div class="card-header"><strong><a>Total User</a></strong></div>
 					<div class="card-body text-center">
 						<h1><?php echo count_total_user($connect); ?></h1>
 					</div>
 				</div>
 			</div>
+				
+			</div>
 			<div class="col-md-3">
+				<div class="category-card">
+
 				<div class="card">
 					<div class="card-header"><strong>Total Category</strong></div>
 					<div class="card-body text-center">
 						<h1><?php echo count_total_category($connect); ?></h1>
 					</div>
 				</div>
+
+				</div>
+				
 			</div>
 			<div class="col-md-3">
-				<div class="card">
-					<div class="card-header"><strong>Total Brand</strong></div>
-					<div class="card-body text-center">
-						<h1><?php echo count_total_brand($connect); ?></h1>
+
+				<div class="brand-card">
+					<div class="card">
+						<div class="card-header"><strong>Total Brand</strong></div>
+						<div class="card-body text-center">
+							<h1><?php echo count_total_brand($connect); ?></h1>
+						</div>
 					</div>
 				</div>
+				
 			</div>
 			<div class="col-md-3">
+
+				<div class="total-items-card">
 				<div class="card">
-					<div class="card-header"><strong>Total Item in Stock</strong></div>
+					<div class="card-header"><strong>Total Items in Stock</strong></div>
 					<div class="card-body text-center">
 						<h1><?php echo count_total_product($connect); ?></h1>
 					</div>
 				</div>
+				</div>
+				
 			</div>
 		<?php
 		}

@@ -36,7 +36,29 @@ function fill_brand_list($connect, $category_id)
 	return $output;
 }
 
+
+function fill_unit_list($connect)
+{
+	$query = "
+	SELECT * FROM unit 
+	WHERE unit_status = 'active' 
+	ORDER BY unit_name ASC
+	";
+	$statement = $connect->prepare($query);
+	$statement->execute();
+	$result = $statement->fetchAll();
+	$output = '';
+	foreach($result as $row)
+	{
+		$output .= '<option value="'.$row["unit_id"].'">'.$row["unit_name"].'</option>';
+	}
+	return $output;
+}
+
+
+
 function get_user_name($connect, $user_id)
+
 {
 	$query = "
 	SELECT user_name FROM user_details WHERE user_id = '".$user_id."'
@@ -81,7 +103,7 @@ function fetch_product_details($product_id, $connect)
 		$output['product_name'] = $row["product_name"];
 		$output['quantity'] = $row["product_quantity"];
 		$output['price'] = $row['product_base_price'];
-		$output['tax'] = $row['product_tax'];
+
 	}
 	return $output;
 }
@@ -93,7 +115,7 @@ function available_product_quantity($connect, $product_id)
 	SELECT 	inventory_order_product.quantity FROM inventory_order_product 
 	INNER JOIN inventory_order ON inventory_order.inventory_order_id = inventory_order_product.inventory_order_id
 	WHERE inventory_order_product.product_id = '".$product_id."' AND
-	inventory_order.inventory_order_status = 'active'
+	inventory_order.inventory_order_status = 'paid'
 	";
 	$statement = $connect->prepare($query);
 	$statement->execute();
@@ -160,7 +182,7 @@ function count_total_order_value($connect)
 {
 	$query = "
 	SELECT sum(inventory_order_total) as total_order_value FROM inventory_order 
-	WHERE inventory_order_status='active'
+	WHERE inventory_order_status='paid'
 	";
 	if($_SESSION['type'] == 'user')
 	{
@@ -180,7 +202,7 @@ function count_total_cash_order_value($connect)
 	$query = "
 	SELECT sum(inventory_order_total) as total_order_value FROM inventory_order 
 	WHERE payment_status = 'cash' 
-	AND inventory_order_status='active'
+	AND inventory_order_status='paid'
 	";
 	if($_SESSION['type'] == 'user')
 	{
@@ -198,7 +220,7 @@ function count_total_cash_order_value($connect)
 function count_total_credit_order_value($connect)
 {
 	$query = "
-	SELECT sum(inventory_order_total) as total_order_value FROM inventory_order WHERE payment_status = 'credit' AND inventory_order_status='active'
+	SELECT sum(inventory_order_total) as total_order_value FROM inventory_order WHERE payment_status = 'credit' AND inventory_order_status='paid'
 	";
 	if($_SESSION['type'] == 'user')
 	{
@@ -222,7 +244,7 @@ function get_user_wise_total_order($connect)
 	user_details.user_name 
 	FROM inventory_order 
 	INNER JOIN user_details ON user_details.user_id = inventory_order.user_id 
-	WHERE inventory_order.inventory_order_status = "active" GROUP BY inventory_order.user_id
+	WHERE inventory_order.inventory_order_status = "paid" GROUP BY inventory_order.user_id
 	';
 	$statement = $connect->prepare($query);
 	$statement->execute();
@@ -270,4 +292,3 @@ function get_user_wise_total_order($connect)
 
 
 ?>
-
