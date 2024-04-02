@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>users page</title>
+
+    <!-- bootstrap-5.3.2 start FOLDER LINKS-->
+<script src="js/jqueryv3.6.0.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
+<!-- bootstrap-5.3.2 end -->
+   
+</head>
+<body>
+    
 <?php
 //user.php
 
@@ -13,7 +32,7 @@ if($_SESSION["type"] != 'admin')
 	header("location:index.php");
 }
 
-// include('header.php');
+
 
 include('sidebar.php');
 
@@ -26,14 +45,7 @@ include('sidebar.php');
     <?php include"css/pages_stylesheet/user.css"?>
 </style>
 
-<!-- bootstrap-5.3.2 start FOLDER LINKS-->
-<script src="js/jqueryv3.6.0.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
-<!-- bootstrap-5.3.2 end -->
+
    
 <div class="content-container">
 
@@ -61,6 +73,7 @@ include('sidebar.php');
                                     <th>Name</th>
                                     <th>Status</th>
                                     <th>Edit</th>
+                                    <th>status</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
@@ -76,8 +89,9 @@ include('sidebar.php');
             <form method="post" id="user_form">
                 <div class="modal-content">
                     <div class="modal-header">
+                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add User</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <h4 class="modal-title"><i class="fa fa-plus"></i> Add User</h4>
+                       
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -105,6 +119,10 @@ include('sidebar.php');
     </div>
 
 </div>
+</body>
+</html>
+
+
 
 <script>
     $(document).ready(function () {
@@ -126,7 +144,7 @@ include('sidebar.php');
             },
             "columnDefs": [
                 {
-                    "targets": [4, 5],
+                    "targets": [4, 5, 6],
                     "orderable": false
                 }
             ],
@@ -172,10 +190,10 @@ include('sidebar.php');
             })
         });
 
-        $(document).on('click', '.delete', function () {
+        $(document).on('click', '.status', function () {
             var user_id = $(this).attr("id");
             var status = $(this).data('status');
-            var btn_action = "delete";
+            var btn_action = "status";
             if (confirm("Are you sure you want to change status?")) {
                 $.ajax({
                     url: "user_action.php",
@@ -193,6 +211,30 @@ include('sidebar.php');
         });
 
     });
+
+
+    $(document).on('click', '.delete', function(){
+            var user_id = $(this).attr("id");
+
+            var btn_action = 'delete';
+            if(confirm("Are you sure you want to delete this account?"))
+            {
+                $.ajax({
+                    url:"user_action.php",
+                    method:"POST",
+                    data:{user_id:user_id, btn_action:btn_action},
+                    success:function(data){
+                        $('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+                        userdataTable.ajax.reload();
+                    }
+                });
+            }
+            else
+            {
+                return false;
+            }
+        });
+
 </script>
 
 <?php

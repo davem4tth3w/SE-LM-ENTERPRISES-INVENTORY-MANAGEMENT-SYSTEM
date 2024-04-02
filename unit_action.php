@@ -1,6 +1,6 @@
 <?php
 
-//category_action.php
+//unit_action.php
 
 include('database_connection.php');
 
@@ -9,35 +9,35 @@ if(isset($_POST['btn_action']))
 	if($_POST['btn_action'] == 'Add')
 	{
 		$query = "
-		INSERT INTO category (category_name) 
-		VALUES (:category_name)
+		INSERT INTO unit (unit_name) 
+		VALUES (:unit_name)
 		";
 		$statement = $connect->prepare($query);
 		$statement->execute(
 			array(
-				':category_name'	=>	$_POST["category_name"]  
+				':unit_name'	=>	$_POST["unit_name"]  
 			)
 		);
 		$result = $statement->fetchAll();
 		if(isset($result))
 		{
-			echo 'Category Name Added';
+			echo 'unit Name Added';
 		}
 	}
 	
 	if($_POST['btn_action'] == 'fetch_single')
 	{
-		$query = "SELECT * FROM category WHERE category_id = :category_id";
+		$query = "SELECT * FROM unit WHERE unit_id = :unit_id";
 		$statement = $connect->prepare($query);
 		$statement->execute(
 			array(
-				':category_id'	=>	$_POST["category_id"]
+				':unit_id'	=>	$_POST["unit_id"]
 			)
 		);
 		$result = $statement->fetchAll();
 		foreach($result as $row)
 		{
-			$output['category_name'] = $row['category_name'];
+			$output['unit_name'] = $row['unit_name'];
 		}
 		echo json_encode($output);
 	}
@@ -45,20 +45,20 @@ if(isset($_POST['btn_action']))
 	if($_POST['btn_action'] == 'Edit')
 	{
 		$query = "
-		UPDATE category set category_name = :category_name  
-		WHERE category_id = :category_id
+		UPDATE unit set unit_name = :unit_name  
+		WHERE unit_id = :unit_id
 		";
 		$statement = $connect->prepare($query);
 		$statement->execute(
 			array(
-				':category_name'	=>	$_POST["category_name"],
-				':category_id'		=>	$_POST["category_id"]
+				':unit_name'	=>	$_POST["unit_name"],
+				':unit_id'		=>	$_POST["unit_id"]
 			)
 		);
 		$result = $statement->fetchAll();
 		if(isset($result))
 		{
-			echo 'Category Name Edited';
+			echo 'Unit Name Edited';
 		}
 	}
 	if($_POST['btn_action'] == 'status')
@@ -69,21 +69,21 @@ if(isset($_POST['btn_action']))
 			$status = 'inactive';	
 		}
 		$query = "
-		UPDATE category 
-		SET category_status = :category_status 
-		WHERE category_id = :category_id
+		UPDATE unit 
+		SET unit_status = :unit_status 
+		WHERE unit_id = :unit_id
 		";
 		$statement = $connect->prepare($query);
 		$statement->execute(
 			array(
-				':category_status'	=>	$status,
-				':category_id'		=>	$_POST["category_id"]
+				':unit_status'	=>	$status,
+				':unit_id'		=>	$_POST["unit_id"]
 			)
 		);
 		$result = $statement->fetchAll();
 		if(isset($result))
 		{
-			echo 'Category status change to ' . $status;
+			echo 'Unit status change to ' . $status;
 		}
 	}
 
@@ -91,20 +91,20 @@ if(isset($_POST['btn_action']))
 	if($_POST['btn_action'] == 'delete')
 	{
 		$query = "
-		DELETE FROM category 
-		WHERE category_id = :category_id
+		DELETE FROM unit 
+		WHERE unit_id = :unit_id
 		";
 		
 		$statement = $connect->prepare($query);
 		$statement->execute(
 			array(
-				':category_id'		=>	$_POST["category_id"]
+				':unit_id'		=>	$_POST["unit_id"]
 			)
 		);
 		$result = $statement->fetchAll();
 		if(isset($result))
 		{
-			echo 'Category deleted';
+			echo 'unit deleted';
 		}
 	}
 }

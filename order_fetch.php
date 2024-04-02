@@ -61,13 +61,13 @@ foreach($result as $row)
 	}
 
 	$status = '';
-	if($row['inventory_order_status'] == 'active')
+	if($row['inventory_order_status'] == 'paid')
 	{
-		$status = '<span class="label label-success">Active</span>';
+		$status = '<span class="label label-success">Paid</span>';
 	}
 	else
 	{
-		$status = '<span class="label label-danger">Inactive</span>';
+		$status = '<span class="label label-danger">Partial Payment</span>';
 	}
 	$sub_array = array();
 	$sub_array[] = $row['inventory_order_id'];
@@ -80,9 +80,11 @@ foreach($result as $row)
 	{
 		$sub_array[] = get_user_name($connect, $row['user_id']);
 	}
-	$sub_array[] = '<a href="view_order.php?pdf=1&order_id='.$row["inventory_order_id"].'" class="btn btn-info btn-xs">View PDF</a>';
-	$sub_array[] = '<button type="button" name="update" id="'.$row["inventory_order_id"].'" class="btn btn-warning btn-xs update">Update</button>';
-	$sub_array[] = '<button type="button" name="delete" id="'.$row["inventory_order_id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["inventory_order_status"].'">Delete</button>';
+	$sub_array[] = '<a href="view_order.php?pdf=1&order_id='.$row["inventory_order_id"].'" class="order-pdf-button"><i class="fa-solid fa-file-pdf"></i></a>';
+	$sub_array[] = '<button type="button" name="update" id="'.$row["inventory_order_id"].'" class="btn btn-warning btn-xs update"><i class="fa-solid fa-pen-to-square"></i></button>';
+	$sub_array[] = '<button type="button" name="status" id="'.$row["inventory_order_id"].'" class="btn btn-success btn-xs status" data-status="'.$row["inventory_order_status"].'">status</button>';
+	
+	$sub_array[] = '<button type="button" name="delete" id="'.$row["inventory_order_id"].'" class="btn btn-danger btn-xs delete" data-delete="'.$row["inventory_order_id"].'"><i class="fa-solid fa-trash"></i></button>';
 	$data[] = $sub_array;
 }
 

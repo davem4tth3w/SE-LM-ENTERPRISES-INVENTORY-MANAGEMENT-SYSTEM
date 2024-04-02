@@ -76,7 +76,7 @@ if(isset($_POST['btn_action']))
 			echo 'User Details Edited';
 		}
 	}
-	if($_POST['btn_action'] == 'delete')
+	if($_POST['btn_action'] == 'status')
 	{
 		$status = 'Active';
 		if($_POST['status'] == 'Active')
@@ -99,6 +99,26 @@ if(isset($_POST['btn_action']))
 		if(isset($result))
 		{
 			echo 'User Status change to ' . $status;
+		}
+	}
+
+	if($_POST['btn_action'] == 'delete')
+	{
+		$query = "
+		DELETE FROM user_details 
+		WHERE user_id = :user_id
+		";
+		
+		$statement = $connect->prepare($query);
+		$statement->execute(
+			array(
+				':user_id'		=>	$_POST["user_id"]
+			)
+		);
+		$result = $statement->fetchAll();
+		if(isset($result))
+		{
+			echo 'User account deleted';
 		}
 	}
 }

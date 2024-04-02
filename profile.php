@@ -1,3 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile page</title>
+
+	<!-- bootstrap-5.3.2 start FOLDER LINKS-->
+<script src="js/jqueryv3.6.0.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
+<!-- bootstrap-5.3.2 end -->
+</head>
+<body>
 <?php
 //profile.php
 
@@ -32,14 +49,6 @@ include('sidebar.php');
     <?php include"css/pages_stylesheet/profile.css"?>
 </style>
 
-<!-- bootstrap-5.3.2 start FOLDER LINKS-->
-<script src="js/jqueryv3.6.0.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
-<!-- bootstrap-5.3.2 end -->
 
 		<div class="content-container">
 
@@ -75,6 +84,10 @@ include('sidebar.php');
 </div>
 
 </div>
+
+</body>
+</html>
+
 
 <script>
 $(document).ready(function(){

@@ -1,29 +1,11 @@
-<?php
-//product.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>products page</title>
 
-include('database_connection.php');
-include('function.php');
-
-if(!isset($_SESSION["type"]))
-{
-    header('location:login.php');
-}
-
-if($_SESSION['type'] != 'admin')
-{
-    header('location:index.php');
-}
-
-// include('header.php');
-
-include('sidebar.php');
-?>       
-
-<style>
-    <?php include"css/pages_stylesheet/product.css"?>
-</style>
-
-<!-- bootstrap-5.3.2 start FOLDER LINKS-->
+    <!-- bootstrap-5.3.2 start FOLDER LINKS-->
 <script src="js/jqueryv3.6.0.js"></script>
 <link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
 <script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
@@ -48,6 +30,34 @@ include('sidebar.php');
 
 <!-- bootstrapv5 -->
         <script src="bootstrap_v5/bootstrap-v5-files/dist/js/bootstrap.min.js"></script> 
+    
+</head>
+<body>
+
+
+<?php
+//product.php
+
+include('database_connection.php');
+include('function.php');
+
+if(!isset($_SESSION["type"]))
+{
+    header('location:login.php');
+}
+
+// if($_SESSION['type'] != 'admin')
+// {
+//     header('location:index.php');
+// }
+
+
+include('sidebar.php');
+?>       
+
+<style>
+    <?php include"css/pages_stylesheet/product.css"?>
+</style>
 
 
 <!-- products page start -->
@@ -80,6 +90,7 @@ include('sidebar.php');
                                         <th>Brand</th>
                                         <th>Product Name</th>
                                         <th>Quantity</th>
+                                        <th>Unit</th>
                                         <th>Enter By</th>
                                         <th>Status</th>
                                         <!-- clickable sorting icon but not functionable -->
@@ -131,29 +142,27 @@ include('sidebar.php');
                             <label for="product_description">Enter Product Description</label>
                             <textarea name="product_description" id="product_description" class="form-control" rows="5" required></textarea>
                         </div>
+
+
                         <div class="form-group">
                             <label for="product_quantity">Enter Product Quantity</label>
                             <div class="input-group">
                                 <input type="text" name="product_quantity" id="product_quantity" class="form-control" required pattern="[+-]?([0-9]*[.])?[0-9]+"> 
-                                <select name="product_unit" id="product_unit" class="form-select" required>
-                                    <option value="">Select Unit</option>
-                                    <option value="Bags">Bags</option>
-                                   
-                                    <option value="Box">Box</option>                                            
-                                  
-                                    <option value="Pcs">Pcs</option>
-                                    <option value="Meter">Meter</option>
+                
+                                <select name="unit_id" id="unit_id" class="form-select" required>
+                                <option value="">Select Unit</option>
+                                <?php echo fill_unit_list($connect);?>
                                 </select>
+                                                               
                             </div>
                         </div>
+
+
                         <div class="form-group">
                             <label for="product_base_price">Enter Product Base Price</label>
                             <input type="text" name="product_base_price" id="product_base_price" class="form-control" required pattern="[+-]?([0-9]*[.])?[0-9]+">
                         </div>
-                        <div class="form-group">
-                            <label for="product_tax">Enter Product Tax (%)</label>
-                            <input type="text" name="product_tax" id="product_tax" class="form-control" required pattern="[+-]?([0-9]*[.])?[0-9]+">
-                        </div>
+                        
                         
                     </div>
                     <div class="modal-footer">
@@ -184,6 +193,10 @@ include('sidebar.php');
         </div>
     </div>
 
+    
+</body>
+</html>
+
 
     <script>
         $(document).ready(function(){
@@ -198,7 +211,7 @@ include('sidebar.php');
             "columnDefs":[
                 {   
                     // "targets":[7, 8, 9], //original code
-                    "targets":[8, 9, 10,11],
+                    "targets":[ 9, 10,11, 12],
                     "orderable":false,
                 },
             ],
@@ -276,10 +289,9 @@ include('sidebar.php');
                     $('#product_name').val(data.product_name);
                     $('#product_description').val(data.product_description);
                     $('#product_quantity').val(data.product_quantity);
-                    $('#product_unit').val(data.product_unit);
+                    $('#unit_id').val(data.unit_id);
                     $('#product_base_price').val(data.product_base_price);
-                    $('#product_tax').val(data.product_tax);
-                    $('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Product");
+                    $('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Product Details");
                     $('#product_id').val(product_id);
                     $('#action').val("Edit");
                     $('#btn_action').val("Edit");
@@ -313,7 +325,7 @@ include('sidebar.php');
 
         $(document).on('click', '.delete', function(){
             var product_id = $(this).attr("id");
-            // var delete = $(this).data("delete");
+
             var btn_action = 'delete';
             if(confirm("Are you sure you want to delete this product?"))
             {
@@ -332,19 +344,10 @@ include('sidebar.php');
                 return false;
             }
         });
-
-
-
-        // var productdataTable = $('#product_data').DataTable({
-        // "processing": true,
-        // "serverSide": true,
-        // "order": [
-        //     [7, 'asc'] // 7 is the index of the 'Price' column, 'asc' for ascending order, 'desc' for descending
-        // ],
-        // // Rest of your DataTables initialization options...
-        //          });
     
     });
     
     </script>
     
+
+

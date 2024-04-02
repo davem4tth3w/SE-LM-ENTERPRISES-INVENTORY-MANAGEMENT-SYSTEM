@@ -23,6 +23,7 @@
   <a href="#">Customer</a>
   <a href="#">Supplier</a>
   <a href="order.php">Orders</a>
+  <a href="#">Purchases</a>
 
 
   <button class="dropdown-btn">Products 
@@ -32,7 +33,8 @@
     <a href="product.php">Products List</a>
     <a href="category.php">Category</a>
     <a href="brand.php">Brands</a>
-    <a href="brand.php">Pricing</a>
+    <a href="unit.php">Units</a>
+    <a href="#">Pricing</a>
   </div>
 
   <button class="dropdown-btn">Returns 
@@ -44,13 +46,14 @@
   </div>
 
   <a href="user.php">Users</a>
+  <a href="pos.php">POS</a>
   
   <div class="sidebar-footer">
 
 
       <div class="user-name">
 
-            <button class="dropdown-btn"><?php echo $_SESSION["user_name"]; ?>
+            <button class="dropdown-btn"><i class="fa-solid fa-user"></i><?php echo $_SESSION["user_name"]; ?>
             
             <i class="fa fa-caret-down"></i>
           </button>

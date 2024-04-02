@@ -47,7 +47,7 @@ if(isset($_POST["login"]))
 			}
 			else
 			{
-				$message = "<label>Your account is disabled, Contact Master</label>";
+				$message = "<label>This account is disabled.</label>";
 			}
 		}
 	}
@@ -84,39 +84,59 @@ if(isset($_POST["login"]))
 	<body>
 
 
-			<div class="login-container">
-					
+		<div class="login-container">
 
-				<div class="panel panel-default">
-					<div class="log-in-header">
-						<h2>LM ENTERPRISES</h2>
-						</div>
 
-						<div class="panel-heading"><h4>Login</h4></div>
-							<div class="panel-body">
-								<form id="loginForm" method="post">
-									<?php echo $message; ?>
-									<div class="form-group">
-										<label>User Email</label>
-										<input type="text" name="user_email" class="form-control" required />
-									</div>
-									<div class="form-group">
-										<label>Password</label>
-										<input type="password" name="user_password" class="form-control" required />
-									</div>
-									<div class="form-group" id="additionalFieldGroup">
-										<!-- Additional fields will be appended here -->
-										<!-- <button onclick="addAdditionalField()">Add Additional Field</button> -->
-									</div>
-									<div class="form-group">
-										<input type="submit" name="login" value="Login" class="btn btn-info" />
-									</div>
-								</form>
-							</div>
-						</div>
+				<div class="column-1">	
+					<div class="content-container">
+					<h1>LM ENTERPRISES</h1>
 					</div>
+
 				</div>
-			</div>
+
+				<div class="column-2">
+
+						<div class="panel-container">
+								
+								<div class="panel panel-default">
+									<div class="log-in-header">
+										<h2>LOG IN</h2>
+										</div>
+
+				
+											<div class="panel-body">
+												<form id="loginForm" method="post">
+													<?php echo $message; ?>
+													<div class="form-group">
+														<label>User Email</label>
+														<input type="text" name="user_email" class="form-control" required />
+													</div>
+													<div class="form-group">
+														<label>Password</label>
+														<input type="password" name="user_password" class="form-control" required />
+													</div>
+													<div class="form-group" id="additionalFieldGroup">
+														<!-- Additional fields will be appended here -->
+														<!-- <button onclick="addAdditionalField()">Add Additional Field</button> -->
+													</div>
+													<div class="form-group">
+														<div class="log-in-btn">
+														<input type="submit" name="login" value="Login" class="btn btn-info" />
+														</div>
+														
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+
+						</div>
+
+				</div>
+			
+
+		</div>
 	
 
 	</body>

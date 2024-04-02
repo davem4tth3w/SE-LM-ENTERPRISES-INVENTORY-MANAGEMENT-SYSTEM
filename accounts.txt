@@ -1,0 +1,13 @@
+Admin account:
+
+email: admin123@gmail.com
+pass: password
+
+user account:
+
+email: mattd@gmail.com
+pass: matt123
+
+email: snowwhite@gmail.com
+pass: snowwhite123
+

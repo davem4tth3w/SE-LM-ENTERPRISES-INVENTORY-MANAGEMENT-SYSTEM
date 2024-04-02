@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category page</title>
+    <title>unit page</title>
 
     <!-- bootstrap-5.3.2 start FOLDER LINKS-->
 <script src="js/jqueryv3.6.0.js"></script>
@@ -19,7 +19,7 @@
 
 
 <?php
-//category.php
+//unit.php
 
 include('database_connection.php');
 
@@ -41,7 +41,7 @@ include('sidebar.php');
     
 
 <style>
-    <?php include"css/pages_stylesheet/category.css"?>
+    <?php include"css/pages_stylesheet/unit.css"?>
 </style>
 
 <div class="content-container">
@@ -54,12 +54,12 @@ include('sidebar.php');
                     <div class="row">
                         <div class="col-md-10">
                           
-                                <h3 class="card-title">Category List</h3>
+                                <h3 class="card-title">Unit List</h3>
                             
                         </div>
                         <div class="col-md-2" style="text-align: right;">
                            
-                                <button type="button" name="add" id="add_button" data-bs-toggle="modal" data-bs-target="#categoryModal" class="btn btn-success btn-sm">Add</button>
+                                <button type="button" name="add" id="add_button" data-bs-toggle="modal" data-bs-target="#unitModal" class="btn btn-success btn-sm">Add</button>
                          
                         </div>
                     </div>
@@ -67,11 +67,11 @@ include('sidebar.php');
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 table-responsive">
-                            <table id="category_data" class="table table-bordered table-striped">
+                            <table id="unit_data" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Category Name</th>
+                                        <th>Unit</th>
                                         <th>Status</th>
                                         <th>Edit</th>
                                         <th>status</th>
@@ -85,21 +85,21 @@ include('sidebar.php');
             </div>
         </div>
     </div>
-    <div class="modal fade" id="categoryModal">
+    <div class="modal fade" id="unitModal">
         <div class="modal-dialog">
-            <form method="post" id="category_form">
+            <form method="post" id="unit_form">
                 <div class="modal-content">
                     <div class="modal-header">
                         
-                        <h4 class="modal-title"><i class="fa fa-plus"></i> Add Category</h4>
+                        <h4 class="modal-title"><i class="fa fa-plus"></i> Add unit</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <label for="category_name">Enter Category Name</label>
-                        <input type="text" name="category_name" id="category_name" class="form-control" required />
+                        <label for="unit_name">Enter unit Name</label>
+                        <input type="text" name="unit_name" id="unit_name" class="form-control" required />
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="category_id" id="category_id" />
+                        <input type="hidden" name="unit_id" id="unit_id" />
                         <input type="hidden" name="btn_action" id="btn_action" />
                         <input type="submit" name="action" id="action" class="btn btn-info" value="Add" />
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -126,60 +126,60 @@ include('footer.php');
     $(document).ready(function () {
 
         $('#add_button').click(function () {
-            $('#category_form')[0].reset();
-            $('.modal-title').html("<i class='fa fa-plus'></i> Add Category");
+            $('#unit_form')[0].reset();
+            $('.modal-title').html("<i class='fa fa-plus'></i> Add unit");
             $('#action').val('Add');
             $('#btn_action').val('Add');
         });
 
-        $(document).on('submit', '#category_form', function (event) {
+        $(document).on('submit', '#unit_form', function (event) {
             event.preventDefault();
             $('#action').attr('disabled', 'disabled');
             var form_data = $(this).serialize();
             $.ajax({
-                url: "category_action.php",
+                url: "unit_action.php",
                 method: "POST",
                 data: form_data,
                 success: function (data) {
-                    $('#category_form')[0].reset();
-                    $('#categoryModal').modal('hide');
+                    $('#unit_form')[0].reset();
+                    $('#unitModal').modal('hide');
                     $('#alert_action').fadeIn().html('<div class="alert alert-success">' + data + '</div>');
                     $('#action').attr('disabled', false);
-                    categorydataTable.ajax.reload();
+                    unitdataTable.ajax.reload();
                 }
             })
         });
 
         $(document).on('click', '.update', function () {
-            var category_id = $(this).attr("id");
+            var unit_id = $(this).attr("id");
             var btn_action = 'fetch_single';
             $.ajax({
-                url: "category_action.php",
+                url: "unit_action.php",
                 method: "POST",
-                data: { category_id: category_id, btn_action: btn_action },
+                data: { unit_id: unit_id, btn_action: btn_action },
                 dataType: "json",
                 success: function (data) {
-                    $('#categoryModal').modal('show');
-                    $('#category_name').val(data.category_name);
-                    $('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Category");
-                    $('#category_id').val(category_id);
+                    $('#unitModal').modal('show');
+                    $('#unit_name').val(data.unit_name);
+                    $('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Unit");
+                    $('#unit_id').val(unit_id);
                     $('#action').val('Edit');
                     $('#btn_action').val("Edit");
                 }
             })
         });
 
-        var categorydataTable = $('#category_data').DataTable({
+        var unitdataTable = $('#unit_data').DataTable({
             "processing": true,
             "serverSide": true,
             "order": [],
             "ajax": {
-                url: "category_fetch.php",
+                url: "unit_fetch.php",
                 type: "POST"
             },
             "columnDefs": [
                 {
-                    "targets": [3, 4, 5],
+                    "targets": [3, 4, 5,],
                     "orderable": false,
                 },
             ],
@@ -187,17 +187,17 @@ include('footer.php');
         });
 
         $(document).on('click', '.status', function () {
-            var category_id = $(this).attr('id');
+            var unit_id = $(this).attr('id');
             var status = $(this).data("status");
             var btn_action = 'status';
             if (confirm("Are you sure you want to change status?")) {
                 $.ajax({
-                    url: "category_action.php",
+                    url: "unit_action.php",
                     method: "POST",
-                    data: { category_id: category_id, status: status, btn_action: btn_action },
+                    data: { unit_id: unit_id, status: status, btn_action: btn_action },
                     success: function (data) {
                         $('#alert_action').fadeIn().html('<div class="alert alert-info">' + data + '</div>');
-                        categorydataTable.ajax.reload();
+                        unitdataTable.ajax.reload();
                     }
                 })
             }
@@ -207,18 +207,18 @@ include('footer.php');
         });
 
         $(document).on('click', '.delete', function(){
-            var category_id = $(this).attr("id");
+            var unit_id = $(this).attr("id");
 
             var btn_action = 'delete';
-            if(confirm("Are you sure you want to delete this category?"))
+            if(confirm("Are you sure you want to delete this unit?"))
             {
                 $.ajax({
-                    url:"category_action.php",
+                    url:"unit_action.php",
                     method:"POST",
-                    data:{category_id:category_id, btn_action:btn_action},
+                    data:{unit_id:unit_id, btn_action:btn_action},
                     success:function(data){
                         $('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
-                        categorydataTable.ajax.reload();
+                        unitdataTable.ajax.reload();
                     }
                 });
             }

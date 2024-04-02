@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand page</title>
+
+	<!-- bootstrap-5.3.2 start FOLDER LINKS-->
+<script src="js/jqueryv3.6.0.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
+<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
+<!-- bootstrap-5.3.2 end -->
+</head>
+<body>
+
+
+
 <?php
 //brand.php
 include('database_connection.php');
@@ -9,10 +29,10 @@ if(!isset($_SESSION['type']))
 	header('location:login.php');
 }
 
-if($_SESSION['type'] != 'admin')
-{
-	header('location:index.php');
-}
+// if($_SESSION['type'] != 'admin')
+// {
+// 	header('location:index.php');
+// }
 
 include('sidebar.php');
 
@@ -23,14 +43,6 @@ include('sidebar.php');
 </style>
 
 
-<!-- bootstrap-5.3.2 start FOLDER LINKS-->
-<script src="js/jqueryv3.6.0.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/bootstrap.min.css" />
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="bootstrap_v5/bootstrap-5.3.2-dist/css/dataTables.bootstrap5.min.css">
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/jquery.dataTables.min.js"></script>
-<script src="bootstrap_v5/bootstrap-5.3.2-dist/js/dataTables.bootstrap5.min.js"></script>
-<!-- bootstrap-5.3.2 end -->
 
 
 <div class="content-container">
@@ -59,6 +71,7 @@ include('sidebar.php');
 							<th>Brand Name</th>
 							<th>Status</th>
 							<th>Edit</th>
+							<th>Status</th>
 							<th>Delete</th>
 						</tr>
 					</thead>
@@ -73,8 +86,9 @@ include('sidebar.php');
 		<form method="post" id="brand_form">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	
 					<h4 class="modal-title"><i class="fa fa-plus"></i> Add Brand</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
@@ -98,6 +112,19 @@ include('sidebar.php');
 		</form>
 	</div>
 </div>
+
+
+<?php
+include('footer.php');
+?>
+
+
+</div>
+
+
+    
+</body>
+</html>
 
 <script>
 	$(document).ready(function () {
@@ -148,10 +175,10 @@ include('sidebar.php');
 			})
 		});
 
-		$(document).on('click', '.delete', function () {
+		$(document).on('click', '.status', function () {
 			var brand_id = $(this).attr("id");
 			var status = $(this).data('status');
-			var btn_action = 'delete';
+			var btn_action = 'status';
 			if (confirm("Are you sure you want to change status?")) {
 				$.ajax({
 					url: "brand_action.php",
@@ -167,6 +194,28 @@ include('sidebar.php');
 			}
 		});
 
+		$(document).on('click', '.delete', function(){
+            var brand_id = $(this).attr("id");
+
+            var btn_action = 'delete';
+            if(confirm("Are you sure you want to delete this product?"))
+            {
+                $.ajax({
+                    url:"brand_action.php",
+                    method:"POST",
+                    data:{brand_id:brand_id, btn_action:btn_action},
+                    success:function(data){
+                        $('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+                        branddataTable.ajax.reload();
+                    }
+                });
+            }
+            else
+            {
+                return false;
+            }
+        });
+
 
 		var branddataTable = $('#brand_data').DataTable({
 			"processing": true,
@@ -178,7 +227,7 @@ include('sidebar.php');
 			},
 			"columnDefs": [
 				{
-					"targets": [4, 5],
+					"targets": [4, 5, 6],
 					"orderable": false,
 				},
 			],
@@ -187,11 +236,3 @@ include('sidebar.php');
 
 	});
 </script>
-
-
-<?php
-include('footer.php');
-?>
-
-
-</div>

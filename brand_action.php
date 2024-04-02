@@ -68,7 +68,7 @@ if(isset($_POST['btn_action']))
 		}
 	}
 
-	if($_POST['btn_action'] == 'delete')
+	if($_POST['btn_action'] == 'status')
 	{
 		$status = 'active';
 		if($_POST['status'] == 'active')
@@ -91,6 +91,26 @@ if(isset($_POST['btn_action']))
 		if(isset($result))
 		{
 			echo 'Brand status change to ' . $status;
+		}
+	}
+
+	if($_POST['btn_action'] == 'delete')
+	{
+		$query = "
+		DELETE FROM brand 
+		WHERE brand_id = :brand_id
+		";
+		
+		$statement = $connect->prepare($query);
+		$statement->execute(
+			array(
+				':brand_id'		=>	$_POST["brand_id"]
+			)
+		);
+		$result = $statement->fetchAll();
+		if(isset($result))
+		{
+			echo 'Brand deleted';
 		}
 	}
 }
