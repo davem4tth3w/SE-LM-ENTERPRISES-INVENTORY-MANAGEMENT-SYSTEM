@@ -28,9 +28,22 @@ body {
   box-shadow: 0px 0px 3px rgb(150, 150, 150);
 }
 
+.order-pdf-button {
+  margin-top: 5px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background-color: rgb(255, 25, 25);
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  text-decoration: none;
+}
 
+.order-pdf-button i{
+color:white;
+text-decoration: none;
+font-size: 1.5rem;
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>
+}
